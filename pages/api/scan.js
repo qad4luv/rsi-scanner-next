@@ -1,54 +1,48 @@
-import { RSI } from 'technicalindicators';
 import axios from 'axios';
+import { calculateRSI } from '../../utils/rsi';
 
 export default async function handler(req, res) {
-  const interval = req.query.interval || '5'; // Default to 5m
-  const limit = 100;
-  const overboughtThreshold = 70;
-  const oversoldThreshold = 30;
+  const timeframes = ['1', '3', '5', '15', '30', '60', '240', 'D']; // 1m, 3m, ..., 1d
+  const activeTimeframe = req.query.timeframe || '5'; // default: 5m
 
   try {
-    const { data: symbolsData } = await axios.get(
-      'https://api.bybit.com/v5/market/instruments',
-      { params: { category: 'linear' } }
-    );
+    // Get all active USDT perpetual futures symbols
+    const marketResp = await axios.get('https://api.bybit.com/v5/market/instruments-info?category=linear');
+    const symbols = marketResp.data.result.list
+      .filter(item => item.symbol.endsWith('USDT'))
+      .map(item => item.symbol);
 
-    const symbols = symbolsData.result.list.map(item => item.symbol);
     const overbought = [];
     const oversold = [];
+    const all = [];
 
     for (const symbol of symbols) {
       try {
-        const { data } = await axios.get(
-          'https://api.bybit.com/v5/market/kline',
-          {
-            params: {
-              category: 'linear',
-              symbol,
-              interval,
-              limit,
-            },
-          }
-        );
+        const klineURL = `https://api.bybit.com/v5/market/kline?category=linear&symbol=${symbol}&interval=${activeTimeframe}&limit=100`;
+        const klineResp = await axios.get(klineURL);
+        const closes = klineResp.data.result.list.map(k => parseFloat(k[4])); // Close price is 5th item
 
-        const closes = data.result.list.map(item => parseFloat(item[4]));
-        const rsiValues = RSI.calculate({ values: closes, period: 14 });
-        const latestRsi = rsiValues.at(-1);
+        if (closes.length < 14) continue;
 
-        if (!latestRsi) continue;
+        const rsi = calculateRSI(closes);
+        all.push({ symbol, rsi });
 
-        if (latestRsi > overboughtThreshold) {
-          overbought.push({ symbol, rsi: latestRsi });
-        } else if (latestRsi < oversoldThreshold) {
-          oversold.push({ symbol, rsi: latestRsi });
-        }
-      } catch {
+        if (rsi > 70) overbought.push({ symbol, rsi });
+        else if (rsi < 30) oversold.push({ symbol, rsi });
+      } catch (err) {
+        console.log(`Error with ${symbol}:`, err.message);
         continue;
       }
     }
 
-    res.status(200).json({ success: true, overbought, oversold });
+    return res.status(200).json({
+      success: true,
+      timeframe: activeTimeframe,
+      overbought,
+      oversold,
+      all,
+    });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ success: false, error: error.message });
   }
 }
