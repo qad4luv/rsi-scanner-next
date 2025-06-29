@@ -1,40 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 📈 RSI Scanner Dapp on Somnia Testnet
 
-## Getting Started
+This is a Web3-enabled RSI Scanner that identifies **overbought** and **oversold** tokens on Bybit Futures across selected timeframes. It lets connected wallet users log RSI signals **on-chain** to a smart contract deployed on the **Somnia Testnet**.
 
-First, run the development server:
+---
+
+## 🔧 Features
+
+- ✅ Wallet connection via **RainbowKit** + **Wagmi v2**
+- 📊 Fetches RSI signals for timeframes (1m–1d)
+- 🔔 Notifies when new signals appear
+- 🔗 Logs signals to a smart contract on the **Somnia Testnet**
+- 🌐 Fully decentralized frontend (Next.js)
+
+---
+
+## 🚀 Live Demo
+
+Coming soon...
+
+---
+
+## 🛠 Tech Stack
+
+- Next.js
+- Tailwind CSS
+- Wagmi v2 + RainbowKit
+- Web3.js (via Wagmi hooks)
+- Somnia Blockchain Testnet
+- Smart Contract: Solidity (ERC20-style signal logger)
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone the repo**
+
+```bash
+git clone https://github.com/yourusername/rsi-scanner-dapp.git
+cd rsi-scanner-dapp
+````
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Configure environment (optional)**
+   Set up environment variables in `.env.local` (if needed for future API keys).
+
+4. **Run the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 🔗 Smart Contract
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+* **Name:** `RSISignalLogger`
+* **Network:** Somnia Testnet
+* **Address:** `0x1C0BC6f02f3160776906FCdefb7f2df0DAe2DB8F`
+* **Explorer:** [shannon-explorer.somnia.network](https://shannon-explorer.somnia.network)
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🧠 How It Works
 
-To learn more about Next.js, take a look at the following resources:
+1. The backend API fetches Bybit Futures RSI data.
+2. If tokens are overbought (RSI > 70) or oversold (RSI < 30), they appear in the UI.
+3. The user can connect their wallet and log those signals on-chain.
+4. Transactions are sent to the Somnia smart contract and can be viewed on the block explorer.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+```bash
+/pages
+  index.js          # Main UI logic
+  api/scan.js       # API route for fetching RSI data
+/contracts
+  RSISignalLoggerABI.json
+/hooks
+  useLogSignal.js   # Hook to log signals on-chain
+/styles
+  globals.css
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## ✅ To-Do / Improvements
+
+* Add sparkline charts for price trends
+* Add Telegram/email notifications
+* Deploy to Vercel or IPFS
+* Add ability to view logged signals from the blockchain
+
+---
+
+## 🧑‍💻 Author
+
+Made with ❤️ by [@owolabiadebayo](https://github.com/owolabiadebayo)
+
+---
+
+## 📄 License
+
+MIT
+
+```
+
+---
+
+
+```
