@@ -1,7 +1,8 @@
 export function calculateRSI(closes, period = 14) {
   if (closes.length < period) return null;
 
-  let gains = 0, losses = 0;
+  let gains = 0;
+  let losses = 0;
 
   for (let i = 1; i <= period; i++) {
     const diff = closes[i] - closes[i - 1];
@@ -9,20 +10,27 @@ export function calculateRSI(closes, period = 14) {
     else losses -= diff;
   }
 
-  let avgGain = gains / period;
-  let avgLoss = losses / period;
+  gains /= period;
+  losses /= period;
+
+  if (losses === 0) return 100;
+
+  let rs = gains / losses;
+  let rsi = 100 - 100 / (1 + rs);
 
   for (let i = period + 1; i < closes.length; i++) {
     const diff = closes[i] - closes[i - 1];
-    const gain = diff > 0 ? diff : 0;
-    const loss = diff < 0 ? -diff : 0;
+    if (diff >= 0) {
+      gains = (gains * (period - 1) + diff) / period;
+      losses = (losses * (period - 1)) / period;
+    } else {
+      gains = (gains * (period - 1)) / period;
+      losses = (losses * (period - 1) - diff) / period;
+    }
 
-    avgGain = (avgGain * (period - 1) + gain) / period;
-    avgLoss = (avgLoss * (period - 1) + loss) / period;
+    rs = gains / (losses || 1);
+    rsi = 100 - 100 / (1 + rs);
   }
 
-  if (avgLoss === 0) return 100;
-
-  const rs = avgGain / avgLoss;
-  return 100 - 100 / (1 + rs);
+  return Math.round(rsi * 100) / 100; // round to 2 decimal places
 }

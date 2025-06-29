@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const timeframes = [
   { label: '1m', value: '1' },
@@ -29,6 +30,10 @@ export default function Home() {
             setLastUpdated(new Date().toLocaleTimeString());
           }
           setLoading(false);
+        })
+        .catch(err => {
+          console.error('Error fetching data:', err);
+          setLoading(false);
         });
     };
 
@@ -40,7 +45,11 @@ export default function Home() {
 
   return (
     <main className="p-6 font-sans">
-      <h1 className="text-2xl font-bold mb-4">📈 Bybit RSI Scanner</h1>
+      <h1 className="text-2xl font-bold mb-4">📈 Bybit RSI Scanner Dapp</h1>
+
+      <div className="mb-4">
+        <ConnectButton />
+      </div>
 
       <label className="block mb-4">
         ⏱ Timeframe:
