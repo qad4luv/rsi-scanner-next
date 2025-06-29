@@ -36,8 +36,8 @@ Coming soon...
 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/yourusername/rsi-scanner-dapp.git
-cd rsi-scanner-dapp
+git clone https://github.com/qad4luv/rsi-scanner-next
+cd rsi-scanner-next
 ````
 
 2. **Install dependencies**
