@@ -104,7 +104,7 @@ Visit [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## 🧑‍💻 Author
 
-Made with ❤️ by [@owolabiadebayo](https://github.com/owolabiadebayo)
+Made with ❤️ by [@qad4luv](https://github.com/qad4luv)
 
 ---
 
